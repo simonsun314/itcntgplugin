@@ -773,6 +773,11 @@ public class NfcPlugin extends CordovaPlugin implements NfcAdapter.OnNdefPushCom
         sendEvent(TAG_DEFAULT, Util.stringToJSON(tag));
     }
 
+    private void fireTagEvent(Itc213 tag) {
+        sendEvent(TAG_DEFAULT, Util.stringToJSON(tag));
+    }
+    
+
     private void fireTagEvent(Tag tag) {
         sendEvent(TAG_DEFAULT, Util.tagToJSON(tag));
     }
@@ -868,14 +873,17 @@ public class NfcPlugin extends CordovaPlugin implements NfcAdapter.OnNdefPushCom
             Log.d("itc", "Connected NTag213");
             byte[] signature = nTag213.readSignature();
             Log.d("itc", "Signature:" + bytesToHex(signature));
-
+            Itc213 itctag = new Itc213();
             //simon add return to js
-            fireTagEvent(bytesToHex(signature));  
-            
+            itctag.setSig(bytesToHex(signature));
+            //fireTagEvent(bytesToHex(signature));  
+            //fireTagEvent(itctag.getSig());  
             // uid
             UID uid = nTag213.readUID();
             uid.validateCheckSum();
             Log.d("itc", "UID:" + bytesToHex(uid.getRaw()));
+            itctag.setUid(bytesToHex(uid.getRaw()));
+            fireTagEvent(itctag);
             // itcdata
             ITCData itcData = nTag213.readITCData();
             Log.d("itc", "ITCData is loaded");

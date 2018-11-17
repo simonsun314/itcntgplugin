@@ -65,6 +65,22 @@ public class Util {
         return json;
     }
 
+
+    static JSONObject stringToJSON(Itc213 tag) {
+        JSONObject json = new JSONObject();
+
+        if (tag != null) {
+            try {
+                json.put("sig",tag.getSig());
+                json.put("uid",tag.getUid());
+                //json.put("techTypes", new JSONArray(Arrays.asList(tag.getTechList())));
+            } catch (JSONException e) {
+                Log.e(TAG, "Failed to convert tag into json: " + tag.toString(), e);
+            }
+        }
+        return json;
+    }
+
     static JSONObject tagToJSON(Tag tag) {
         JSONObject json = new JSONObject();
 

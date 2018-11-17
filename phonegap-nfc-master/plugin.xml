@@ -28,6 +28,8 @@
 
         <source-file src="src/android/src/com/chariotsolutions/nfc/plugin/NfcPlugin.java"
             target-dir="src/com/chariotsolutions/nfc/plugin"/>
+        <source-file src="src/android/src/com/chariotsolutions/nfc/plugin/Itc213.java"
+            target-dir="src/com/chariotsolutions/nfc/plugin"/>
         <source-file src="src/android/src/com/chariotsolutions/nfc/plugin/Util.java"
             target-dir="src/com/chariotsolutions/nfc/plugin"/>
         <source-file src="src/android/src/com/nbs/itc/ndk/NTag21x.java"
