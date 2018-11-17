@@ -437,7 +437,7 @@ var nfc = {
     },
     readAuthTag: function (AuthMessage, callback,win, fail) {
         document.addEventListener("tag", callback, false);
-        alert("read Auth\n");
+        // alert("read Auth\n");
         cordova.exec(win, fail, "NfcPlugin", "readAuthTag", [AuthMessage]);
     },
     makeReadOnly: function (win, fail) {

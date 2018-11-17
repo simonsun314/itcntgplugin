@@ -1335,6 +1335,7 @@ public class NfcPlugin extends CordovaPlugin implements NfcAdapter.OnNdefPushCom
                 ITCNTag213 nTag213 = ITCNTag213.wrap(nTag21x);
                if(read) {
                    readNTag213(nTag213);
+                   //setIntent(new Intent());
                } else {
                    writeNTag213(nTag213);
                }
@@ -1350,7 +1351,7 @@ public class NfcPlugin extends CordovaPlugin implements NfcAdapter.OnNdefPushCom
         } catch(Exception ex) {
             Log.d("itc", ex.getMessage());
         }
-        setIntent(new Intent()); //create intent for write simon 
+        //setIntent(new Intent()); //create intent for write simon 
     }
 
 
