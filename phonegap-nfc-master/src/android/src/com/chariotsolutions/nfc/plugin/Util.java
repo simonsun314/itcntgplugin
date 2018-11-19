@@ -16,6 +16,7 @@ import java.util.List;
 public class Util {
 
     static final String TAG = "NfcPlugin";
+    private final static int ITCID_AUTHPW_LENGTH = 4;
 
     static JSONObject ndefToJSON(Ndef ndef) {
         JSONObject json = new JSONObject();
@@ -73,6 +74,11 @@ public class Util {
             try {
                 json.put("sig",tag.getSig());
                 json.put("uid",tag.getUid());
+                json.put("errCode",tag.getErrCode());
+                json.put("customercode",tag.getCustomCode());
+                json.put("commoditycode",tag.getCommodityCode());
+                json.put("instancecode",tag.getInstanceCode());
+                json.put("passprotstat",tag.getPassProtStatus());
                 //json.put("techTypes", new JSONArray(Arrays.asList(tag.getTechList())));
             } catch (JSONException e) {
                 Log.e(TAG, "Failed to convert tag into json: " + tag.toString(), e);
@@ -125,6 +131,15 @@ public class Util {
         return records;
     }
 
+    //Simon add to get Auth
+    static byte[] jsonTobyteRecords(String ndefMessageAsJSON) throws JSONException {
+        JSONArray jsonRecords = new JSONArray(ndefMessageAsJSON);
+        JSONObject record = jsonRecords.getJSONObject(0);
+        byte[] records = jsonToAuthArray(record.getJSONArray("payload"));
+        return records;
+    }
+
+
     static JSONArray byteArrayToJSON(byte[] bytes) {
         JSONArray json = new JSONArray();
         for (byte aByte : bytes) {
@@ -137,6 +152,15 @@ public class Util {
         byte[] b = new byte[json.length()];
         for (int i = 0; i < json.length(); i++) {
             b[i] = (byte) json.getInt(i);
+        }
+        return b;
+    }
+
+    
+    static byte[] jsonToAuthArray(JSONArray json) throws JSONException {
+        byte[] b = new byte[ITCID_AUTHPW_LENGTH];
+        for (int i = 0; i < ITCID_AUTHPW_LENGTH; i++) {
+            b[i] = (byte) json.getInt(i+3);
         }
         return b;
     }

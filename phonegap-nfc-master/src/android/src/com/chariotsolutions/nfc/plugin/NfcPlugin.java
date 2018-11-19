@@ -372,10 +372,11 @@ public class NfcPlugin extends CordovaPlugin implements NfcAdapter.OnNdefPushCom
         }
        
         Tag tag = savedIntent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-        NdefRecord[] records = Util.jsonToNdefRecords(data.getString(0));
+        // NdefRecord[] records = Util.jsonToNdefRecords(data.getString(0));
+         byte[] payload = Util.jsonTobyteRecords(data.getString(0));
         //writeNdefMessage(new NdefMessage(records), tag, callbackContext);
         Log.d(TAG, "again parse nfc");
-        processNfcAwithAuth(tag,callbackContext);
+        processNfcAwithAuth(tag,payload,callbackContext);
     }
 
     private void writeNdefMessage(final NdefMessage message, final Tag tag, final CallbackContext callbackContext) {
@@ -888,11 +889,12 @@ public class NfcPlugin extends CordovaPlugin implements NfcAdapter.OnNdefPushCom
     }
     
     private void readNTag213(ITCNTag213 nTag213) {
+        Itc213 itctag = new Itc213();
         try {
             Log.d("itc", "Connected NTag213");
             byte[] signature = nTag213.readSignature();
             Log.d("itc", "Signature:" + bytesToHex(signature));
-            Itc213 itctag = new Itc213();
+            
             //simon add return to js
             itctag.setSig(bytesToHex(signature));
             //fireTagEvent(bytesToHex(signature));  
@@ -902,57 +904,62 @@ public class NfcPlugin extends CordovaPlugin implements NfcAdapter.OnNdefPushCom
             uid.validateCheckSum();
             Log.d("itc", "UID:" + bytesToHex(uid.getRaw()));
             itctag.setUid(bytesToHex(uid.getRaw()));
-            fireTagEvent(itctag);
+            //fireTagEvent(itctag);
             
-            // // itcdata
-            // ITCData itcData = nTag213.readITCData();
-            // Log.d("itc", "ITCData is loaded");
+            // itcdata
+            ITCData itcData = nTag213.readITCData();
+            Log.d("itc", "ITCData is loaded");
 
-            // if (itcData.getItcChecksum() != null) {
-            //     itcData.validateCheckSum();
-            //     Log.d("itc", "ITCData verified");
-            // }
+            if (itcData.getItcChecksum() != null) {
+                itcData.validateCheckSum();
+                Log.d("itc", "ITCData verified");
+            }
 
-            // // parse ITCID
-            // ITCID itcid = itcData.getITCID();
-            // // verify ITCID
-            // itcid.validateCheckSum();
-            // Log.d("itc", "ITCID CheckSum verified");
-            // Log.d("itc", String.format("Customer Code: %X", itcid.getCustomerCode()));
-            // Log.d("itc", String.format("Commodity Code: %X", itcid.getCommodityCode()));
-            // Log.d("itc", "Instance Code: "+ bytesToHex(itcid.getInstanceCode()));
+            // parse ITCID
+            ITCID itcid = itcData.getITCID();
+            // verify ITCID
+            itcid.validateCheckSum();  //err will throw exception
+            Log.d("itc", "ITCID CheckSum verified");
+            Log.d("itc", String.format("Customer Code: %X", itcid.getCustomerCode()));
+            Log.d("itc", String.format("Commodity Code: %X", itcid.getCommodityCode()));
+            Log.d("itc", "Instance Code: "+ bytesToHex(itcid.getInstanceCode()));
+            itctag.setCustomCode(String.format("%X", itcid.getCustomerCode()));
+            itctag.setCommodityCode(String.format("%X", itcid.getCommodityCode()));
+            itctag.setInstanceCode(bytesToHex(itcid.getInstanceCode()));
+            // parse header
+            ITCHeader itcHeader = itcData.getItcHeader();
+            Log.d("itc", String.format("formatVersion: %d", itcHeader.getFormatVersion()));
+            ITCTagCapability capability = itcHeader.getTagCapability();
+            boolean passwordProtected = false;
+            for(ITCTagCapability.Cap cap : ITCTagCapability.Cap.values()) {
+                if (cap == ITCTagCapability.Cap.UNKNOWN) {
+                    continue;
+                }
+                if (cap == ITCTagCapability.Cap.PASSWORD && capability.isEnabled(cap)) {
+                    passwordProtected = true;
+                }
+                Log.d("itc", String.format("Capability[%s]: %b", cap.name(), capability.isEnabled(cap)));
+            }
 
-            // // parse header
-            // ITCHeader itcHeader = itcData.getItcHeader();
-            // Log.d("itc", String.format("formatVersion: %d", itcHeader.getFormatVersion()));
-            // ITCTagCapability capability = itcHeader.getTagCapability();
-            // boolean passwordProtected = false;
-            // for(ITCTagCapability.Cap cap : ITCTagCapability.Cap.values()) {
-            //     if (cap == ITCTagCapability.Cap.UNKNOWN) {
-            //         continue;
-            //     }
-            //     if (cap == ITCTagCapability.Cap.PASSWORD && capability.isEnabled(cap)) {
-            //         passwordProtected = true;
-            //     }
-            //     Log.d("itc", String.format("Capability[%s]: %b", cap.name(), capability.isEnabled(cap)));
-            // }
+            if(passwordProtected) {
+                itctag.setPassProtStatus("yes");
+                // password auth
+                // nTag213.authenticatePwd(new byte[]{
+                //         0x11, 0x22, 0x33, 0x44
+                // }, new byte[]{
+                //         (byte) 0xAA, (byte) 0xBB
+                // });
+                // Log.d("itc", "Password authenticated");
 
-            // if(passwordProtected) {
-            //     // password auth
-            //     nTag213.authenticatePwd(new byte[]{
-            //             0x11, 0x22, 0x33, 0x44
-            //     }, new byte[]{
-            //             (byte) 0xAA, (byte) 0xBB
-            //     });
-            //     Log.d("itc", "Password authenticated");
-
-            //     // reload itcdata
-            //     itcData = nTag213.readITCData();
-            //     Log.d("itc", "ITCData is reloaded");
-            //     itcData.validateCheckSum();
-            //     Log.d("itc", "ITCData verified");
-            // }
-
+                // // reload itcdata
+                // itcData = nTag213.readITCData();
+                // Log.d("itc", "ITCData is reloaded");
+                // itcData.validateCheckSum();
+                // Log.d("itc", "ITCData verified");
+            }else{
+                itctag.setPassProtStatus("no");
+            }
+            fireTagEvent(itctag);
             // ITCDescriptors descs = itcData.getItcDescriptors();
 
 
@@ -969,16 +976,19 @@ public class NfcPlugin extends CordovaPlugin implements NfcAdapter.OnNdefPushCom
         } catch (Exception ex) {
             Log.e("itc", "Exception" + ex.getMessage());
             ex.printStackTrace();
+            itctag.setErrCode(ex.getMessage());
+            fireTagEvent(itctag);
         }
     }
 
     //simon add readntag213auth(auth pass)
     private void readNTag213Auth(ITCNTag213 nTag213,byte[] authwd) {
+        Itc213 itctag = new Itc213();
         try {
             Log.d("itc", "Connected NTag213");
             byte[] signature = nTag213.readSignature();
             Log.d("itc", "Signature:" + bytesToHex(signature));
-            Itc213 itctag = new Itc213();
+            
             //simon add return to js
             itctag.setSig(bytesToHex(signature));
             //fireTagEvent(bytesToHex(signature));  
@@ -1006,7 +1016,9 @@ public class NfcPlugin extends CordovaPlugin implements NfcAdapter.OnNdefPushCom
             Log.d("itc", String.format("Customer Code: %X", itcid.getCustomerCode()));
             Log.d("itc", String.format("Commodity Code: %X", itcid.getCommodityCode()));
             Log.d("itc", "Instance Code: "+ bytesToHex(itcid.getInstanceCode()));
-
+            itctag.setCustomCode(String.format("%X", itcid.getCustomerCode()));
+            itctag.setCommodityCode(String.format("%X", itcid.getCommodityCode()));
+            itctag.setInstanceCode(bytesToHex(itcid.getInstanceCode()));
             // parse header
             ITCHeader itcHeader = itcData.getItcHeader();
             Log.d("itc", String.format("formatVersion: %d", itcHeader.getFormatVersion()));
@@ -1024,9 +1036,7 @@ public class NfcPlugin extends CordovaPlugin implements NfcAdapter.OnNdefPushCom
 
             if(passwordProtected) {
                 // password auth
-                nTag213.authenticatePwd(new byte[]{
-                        0x11, 0x22, 0x33, 0x44
-                }, new byte[]{
+                nTag213.authenticatePwd(authwd, new byte[]{
                         (byte) 0xAA, (byte) 0xBB
                 });
                 Log.d("itc", "Password authenticated");
@@ -1054,6 +1064,7 @@ public class NfcPlugin extends CordovaPlugin implements NfcAdapter.OnNdefPushCom
         } catch (Exception ex) {
             Log.e("itc", "Exception" + ex.getMessage());
             ex.printStackTrace();
+            itctag.setErrCode(ex.getMessage());
         }
     }
 
@@ -1340,11 +1351,14 @@ public class NfcPlugin extends CordovaPlugin implements NfcAdapter.OnNdefPushCom
                    writeNTag213(nTag213);
                }
             } else if (sVersion.equals(bytesToHex(NTag21x.TAG_VERSION_NTAG_213_TAG_TAMPER))){
-                ITCNTag213TagTamper nTag213tt = ITCNTag213TagTamper.wrap(nTag21x);
+                //ITCNTag213TagTamper nTag213tt = ITCNTag213TagTamper.wrap(nTag21x);
+                ITCNTag213 nTag213 = ITCNTag213.wrap(nTag21x);
                 if(read) {
-                    readNTag213TT(nTag213tt);
+                    //readNTag213TT(nTag213tt);
+                    readNTag213(nTag213);
                 } else {
-                    writeNTag213TT(nTag213tt);
+                    //writeNTag213TT(nTag213tt);
+                    writeNTag213(nTag213);
                 }
             }
             nTag21x.close();
@@ -1355,7 +1369,7 @@ public class NfcPlugin extends CordovaPlugin implements NfcAdapter.OnNdefPushCom
     }
 
 
-    private void processNfcAwithAuth(Tag tag,final CallbackContext callbackContext/*,byte[] authwd*/) {
+    private void processNfcAwithAuth(Tag tag,byte[] authwd,final CallbackContext callbackContext) {
         boolean read = true;
         try {
             NTag21x nTag21x = new NTag21x(tag);
@@ -1365,18 +1379,19 @@ public class NfcPlugin extends CordovaPlugin implements NfcAdapter.OnNdefPushCom
             if(sVersion.equals(bytesToHex(NTag21x.TAG_VERSION_NTAG_213))) {
                 ITCNTag213 nTag213 = ITCNTag213.wrap(nTag21x);
                if(read) {
-                    readNTag213Auth(nTag213,new byte[]{
-                        0x11, 0x22, 0x33, 0x44
-                });
+                    readNTag213Auth(nTag213,authwd);
                } else {
                    writeNTag213(nTag213);
                }
             } else if (sVersion.equals(bytesToHex(NTag21x.TAG_VERSION_NTAG_213_TAG_TAMPER))){
-                ITCNTag213TagTamper nTag213tt = ITCNTag213TagTamper.wrap(nTag21x);
+                // ITCNTag213TagTamper nTag213tt = ITCNTag213TagTamper.wrap(nTag21x);
+                ITCNTag213 nTag213 = ITCNTag213.wrap(nTag21x);
                 if(read) {
-                    readNTag213TT(nTag213tt);
+                    //readNTag213TT(nTag213tt);
+                    readNTag213Auth(nTag213,authwd);
                 } else {
-                    writeNTag213TT(nTag213tt);
+                    // writeNTag213TT(nTag213tt);
+                    writeNTag213(nTag213);
                 }
             }
             nTag21x.close();
