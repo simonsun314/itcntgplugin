@@ -413,7 +413,7 @@ var nfc = {
     
     addTagDiscoveredListener: function (callback, win, fail) {
         document.addEventListener("tag", callback, false);
-        alert("run addTagDiscoveredListener");
+        // alert("run addTagDiscoveredListener");
         cordova.exec(win, fail, "NfcPlugin", "registerTag", []);
     },
 
