@@ -920,9 +920,12 @@ public class NfcPlugin extends CordovaPlugin implements NfcAdapter.OnNdefPushCom
             // verify ITCID
             itcid.validateCheckSum();  //err will throw exception
             Log.d("itc", "ITCID CheckSum verified");
+            Log.d("itc", "ITCID " + bytesToHex(itcid.getRaw()));
+            Log.d("itc", String.format("Customer Code: %X", itcid.getCustomerCode()));
             Log.d("itc", String.format("Customer Code: %X", itcid.getCustomerCode()));
             Log.d("itc", String.format("Commodity Code: %X", itcid.getCommodityCode()));
             Log.d("itc", "Instance Code: "+ bytesToHex(itcid.getInstanceCode()));
+            itctag.setItcid(bytesToHex(itcid.getRaw()));
             itctag.setCustomCode(String.format("%X", itcid.getCustomerCode()));
             itctag.setCommodityCode(String.format("%X", itcid.getCommodityCode()));
             itctag.setInstanceCode(bytesToHex(itcid.getInstanceCode()));
@@ -998,7 +1001,7 @@ public class NfcPlugin extends CordovaPlugin implements NfcAdapter.OnNdefPushCom
             uid.validateCheckSum();
             Log.d("itc", "UID:" + bytesToHex(uid.getRaw()));
             itctag.setUid(bytesToHex(uid.getRaw()));
-            fireTagEvent(itctag);
+            
             // itcdata
             ITCData itcData = nTag213.readITCData();
             Log.d("itc", "ITCData is loaded");
@@ -1061,10 +1064,13 @@ public class NfcPlugin extends CordovaPlugin implements NfcAdapter.OnNdefPushCom
             Log.d("itc", "Config Bytes:" + bytesToHex(configBytes));
             byte[] counter = nTag213.readCounter();
             Log.d("itc", "Counter:" + bytesToHex(counter));
+
+            fireTagEvent(itctag);
         } catch (Exception ex) {
             Log.e("itc", "Exception" + ex.getMessage());
             ex.printStackTrace();
             itctag.setErrCode(ex.getMessage());
+            fireTagEvent(itctag);  //if error read throw exception event to app
         }
     }
 

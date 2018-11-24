@@ -20,6 +20,7 @@ public class Itc213 {
     private String CommodityCode;
     private String InstanceCode;
     private String PassProt;
+    private String itcidval;
 
     public Itc213() {
         errCode = "";
@@ -31,16 +32,16 @@ public class Itc213 {
         signature = sigstr;
     }
     public String getUid(){
-        return errCode;
-    }
-    public void setUid(String uidstr){
-        errCode = uidstr;
-    }
-    public String getErrCode(){
         return uid;
     }
+    public void setUid(String uidstr){
+        uid = uidstr;
+    }
+    public String getErrCode(){
+        return errCode;
+    }
     public void setErrCode(String errstr){
-        uid = errstr;
+        errCode = errstr;
     }
 
     public String getCustomCode(){
@@ -66,6 +67,13 @@ public class Itc213 {
     }
     public void setPassProtStatus(String passprotstat){
         PassProt = passprotstat;
+    }
+
+    public String getItcid(){
+        return itcidval;
+    }
+    public void setItcid(String itcidstr){
+        itcidval = itcidstr;
     }
 
   }

@@ -486,6 +486,10 @@ var nfc = {
         document.removeEventListener("ndef", callback, false);
         cordova.exec(win, fail, "NfcPlugin", "removeNdef", []);
     },
+    removeTagListerner:function () {
+        document.removeEventListener("tag", callback, false);
+       
+    },
 
     showSettings: function (win, fail) {
         cordova.exec(win, fail, "NfcPlugin", "showSettings", []);

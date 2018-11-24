@@ -79,6 +79,7 @@ public class Util {
                 json.put("commoditycode",tag.getCommodityCode());
                 json.put("instancecode",tag.getInstanceCode());
                 json.put("passprotstat",tag.getPassProtStatus());
+                json.put("itcidval",tag.getItcid());
                 //json.put("techTypes", new JSONArray(Arrays.asList(tag.getTechList())));
             } catch (JSONException e) {
                 Log.e(TAG, "Failed to convert tag into json: " + tag.toString(), e);
