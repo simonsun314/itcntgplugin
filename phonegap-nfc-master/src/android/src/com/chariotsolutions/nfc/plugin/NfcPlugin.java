@@ -886,6 +886,16 @@ public class NfcPlugin extends CordovaPlugin implements NfcAdapter.OnNdefPushCom
         //parseMessage();
     }
 
+    private String bytesToHex(char[] bytes) {
+        char[] hexArray = "0123456789ABCDEF".toCharArray();
+        char[] hexChars = new char[bytes.length * 2];
+        for ( int j = 0; j < bytes.length; j++ ) {
+            int v = bytes[j] & 0xFF;
+            hexChars[j * 2] = hexArray[v >>> 4];
+            hexChars[j * 2 + 1] = hexArray[v & 0x0F];
+        }
+        return new String(hexChars);
+    }
     private String bytesToHex(byte[] bytes) {
         char[] hexArray = "0123456789ABCDEF".toCharArray();
         char[] hexChars = new char[bytes.length * 2];
@@ -1064,6 +1074,13 @@ public class NfcPlugin extends CordovaPlugin implements NfcAdapter.OnNdefPushCom
             ITCDescriptor[] descList = descs.getDescriptors();
             for (ITCDescriptor desc : descList) {
                 Log.d("itc", String.format("[desc]%s: %s", desc.getType().name(), desc.getContentString()));
+                // Log.d("itc", String.format("[desc]%s: %s", desc.getType().name(), bytesToHex(desc.getContentString().toCharArray())));
+                if(desc.getType().name().equals("ITC_DIGITAL_SIGNATURE")){
+                    Log.d("itc","get signature");
+                    Log.d("itc", String.format("[desc]%s: %s", desc.getType().name(), bytesToHex(desc.getContentString().toCharArray())));
+                    itctag.setItcSig(bytesToHex(desc.getContentString().toCharArray()));
+                }
+           
             }
             byte[] version = nTag213.getVersion();
             Log.d("itc", "Version:" + bytesToHex(version));

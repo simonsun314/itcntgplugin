@@ -21,6 +21,8 @@ public class Itc213 {
     private String InstanceCode;
     private String PassProt;
     private String itcidval;
+    private String itcSig;
+    
 
     public Itc213() {
         errCode = "";
@@ -75,5 +77,12 @@ public class Itc213 {
     public void setItcid(String itcidstr){
         itcidval = itcidstr;
     }
+    public String getItcSig(){
+        return itcSig;
+    }
+    public void setItcSig(String sigstr){
+        itcSig = sigstr;
+    }
+    
 
   }
