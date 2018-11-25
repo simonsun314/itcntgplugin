@@ -82,6 +82,7 @@ public class NfcPlugin extends CordovaPlugin implements NfcAdapter.OnNdefPushCom
     private static final String NDEF_MIME = "ndef-mime";
     private static final String NDEF_FORMATABLE = "ndef-formatable";
     private static final String TAG_DEFAULT = "tag";
+    private static final String ITC_MESSAGE = "itc-msg";
 
     private static final String READER_MODE = "readerMode";
     private static final String DISABLE_READER_MODE = "disableReaderMode";
@@ -802,6 +803,9 @@ public class NfcPlugin extends CordovaPlugin implements NfcAdapter.OnNdefPushCom
         sendEvent(TAG_DEFAULT, Util.stringToJSON(tag));
     }
     
+    private void fireITCEvent(Itc213 tag){
+        sendEvent(ITC_MESSAGE, Util.stringToJSON(tag));
+    }
 
     private void fireTagEvent(Tag tag) {
         sendEvent(TAG_DEFAULT, Util.tagToJSON(tag));
@@ -1068,12 +1072,12 @@ public class NfcPlugin extends CordovaPlugin implements NfcAdapter.OnNdefPushCom
             byte[] counter = nTag213.readCounter();
             Log.d("itc", "Counter:" + bytesToHex(counter));
 
-            fireTagEvent(itctag);
+            fireITCEvent(itctag);
         } catch (Exception ex) {
             Log.e("itc", "Exception" + ex.getMessage());
             ex.printStackTrace();
             itctag.setErrCode(ex.getMessage());
-            fireTagEvent(itctag);  //if error read throw exception event to app
+            fireITCEvent(itctag);  //if error read throw exception event to app
         }
     }
 
