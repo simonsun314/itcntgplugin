@@ -373,10 +373,15 @@ public class NfcPlugin extends CordovaPlugin implements NfcAdapter.OnNdefPushCom
        
         Tag tag = savedIntent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
         // NdefRecord[] records = Util.jsonToNdefRecords(data.getString(0));
-         byte[] payload = Util.jsonTobyteRecords(data.getString(0));
+        //  byte[] payload = Util.jsonTobyteRecords(data.getString(0));
         //writeNdefMessage(new NdefMessage(records), tag, callbackContext);
         Log.d(TAG, "again parse nfc");
-        processNfcAwithAuth(tag,payload,callbackContext);
+
+        CordovaArgs args = new CordovaArgs(data); // execute is using the old signature with JSON data
+
+        byte[] command = args.getArrayBuffer(0);
+        processNfcAwithAuth(tag,command,callbackContext);
+        // processNfcAwithAuth(tag,payload,callbackContext);
     }
 
     private void writeNdefMessage(final NdefMessage message, final Tag tag, final CallbackContext callbackContext) {

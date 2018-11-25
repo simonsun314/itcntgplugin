@@ -435,10 +435,26 @@ var nfc = {
     write: function (ndefMessage, win, fail) {
         cordova.exec(win, fail, "NfcPlugin", "writeTag", [ndefMessage]);
     },
-    readAuthTag: function (AuthMessage, callback,win, fail) {
+    readAuthTag: function (data, callback,win, fail) {
         document.addEventListener("tag", callback, false);
-        // alert("read Auth\n");
-        cordova.exec(win, fail, "NfcPlugin", "readAuthTag", [AuthMessage]);
+        
+        // var buffer;
+        
+        if (typeof data === 'string') {
+            alert("1");
+            buffer = util.hexStringToArrayBuffer(data);
+
+        } else if (data instanceof ArrayBuffer) {
+            alert("2");
+            buffer = data;
+        } else if (data instanceof Uint8Array) {
+            alert("3");
+            buffer = data.buffer;
+        } else {
+            reject("Expecting an ArrayBuffer or String");
+        }
+        alert("read Auth\n");
+        cordova.exec(win, fail, "NfcPlugin", "readAuthTag", [buffer]);
     },
     makeReadOnly: function (win, fail) {
         cordova.exec(win, fail, "NfcPlugin", "makeReadOnly", []);
@@ -736,12 +752,14 @@ var util = {
         // ensure even number of characters
         if (hexString.length % 2 != 0) {
             console.log('WARNING: expecting an even number of characters in the hexString');
+            alert('WARNING: expecting an even number of characters in the hexString');
         }
 
         // check for some non-hex characters
         var bad = hexString.match(/[G-Z\s]/i);
         if (bad) {
             console.log('WARNING: found non-hex characters', bad);
+            alert('WARNING: found non-hex characters', bad);
         }
 
         // split the string into pairs of octets
