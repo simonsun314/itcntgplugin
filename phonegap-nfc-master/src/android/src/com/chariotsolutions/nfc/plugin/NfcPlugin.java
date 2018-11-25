@@ -907,6 +907,14 @@ public class NfcPlugin extends CordovaPlugin implements NfcAdapter.OnNdefPushCom
         return new String(hexChars);
     }
     
+
+    private static int byteArrayToInt(byte[] b) {
+        return b[0] & 0xFF |
+                (b[1] & 0xFF) << 8 |
+                (b[2] & 0xFF) << 16;
+//                |(b[3] & 0xFF) << 24;
+    }
+
     private void readNTag213(ITCNTag213 nTag213) {
         Itc213 itctag = new Itc213();
         try {
@@ -1088,7 +1096,8 @@ public class NfcPlugin extends CordovaPlugin implements NfcAdapter.OnNdefPushCom
             Log.d("itc", "Config Bytes:" + bytesToHex(configBytes));
             byte[] counter = nTag213.readCounter();
             Log.d("itc", "Counter:" + bytesToHex(counter));
-
+            Log.d("itc", "Counter:" + byteArrayToInt(counter));
+            itctag.setCount(byteArrayToInt(counter));
             fireITCEvent(itctag);
         } catch (Exception ex) {
             Log.e("itc", "Exception" + ex.getMessage());

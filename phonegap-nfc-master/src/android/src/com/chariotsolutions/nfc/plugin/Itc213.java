@@ -22,7 +22,7 @@ public class Itc213 {
     private String PassProt;
     private String itcidval;
     private String itcSig;
-    
+    private int itccount;
 
     public Itc213() {
         errCode = "";
@@ -83,6 +83,11 @@ public class Itc213 {
     public void setItcSig(String sigstr){
         itcSig = sigstr;
     }
-    
+    public int getCount(){
+        return itccount;
+    }
+    public void setCount(int cnt){
+        itccount = cnt;
+    }
 
   }
