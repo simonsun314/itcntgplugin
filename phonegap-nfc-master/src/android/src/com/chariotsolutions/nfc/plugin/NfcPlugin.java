@@ -1044,9 +1044,7 @@ public class NfcPlugin extends CordovaPlugin implements NfcAdapter.OnNdefPushCom
 
             if(passwordProtected) {
                 // password auth
-                nTag213.authenticatePwd(authwd, new byte[]{
-                        (byte) 0xAA, (byte) 0xBB
-                });
+                nTag213.authenticatePwd(authwd, new byte []{authwd[4],authwd[5]});
                 Log.d("itc", "Password authenticated");
 
                 // reload itcdata
