@@ -1403,6 +1403,9 @@ public class NfcPlugin extends CordovaPlugin implements NfcAdapter.OnNdefPushCom
             nTag21x.close();
         } catch(Exception ex) {
             Log.d("itc", ex.getMessage());
+            Itc213 itctag = new Itc213();
+            itctag.setErrCode(ex.getMessage());
+            fireTagEvent(itctag);
         }
         //setIntent(new Intent()); //create intent for write simon 
     }
@@ -1438,6 +1441,9 @@ public class NfcPlugin extends CordovaPlugin implements NfcAdapter.OnNdefPushCom
         } catch(Exception ex) {
             Log.d("itc", ex.getMessage());
             callbackContext.error("processNfcAwithAuth error");
+            Itc213 itctag = new Itc213();
+            itctag.setErrCode(ex.getMessage());
+            fireITCEvent(itctag);  //if error read throw exception event to app
         }
 
     }
