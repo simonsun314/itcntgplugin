@@ -441,19 +441,19 @@ var nfc = {
         // var buffer;
         
         if (typeof data === 'string') {
-            alert("1");
+            // alert("1");
             buffer = util.hexStringToArrayBuffer(data);
 
         } else if (data instanceof ArrayBuffer) {
-            alert("2");
+            // alert("2");
             buffer = data;
         } else if (data instanceof Uint8Array) {
-            alert("3");
+            // alert("3");
             buffer = data.buffer;
         } else {
             reject("Expecting an ArrayBuffer or String");
         }
-        alert("read Auth\n");
+        // alert("read Auth\n");
         cordova.exec(win, fail, "NfcPlugin", "readAuthTag", [buffer]);
     },
     makeReadOnly: function (win, fail) {
