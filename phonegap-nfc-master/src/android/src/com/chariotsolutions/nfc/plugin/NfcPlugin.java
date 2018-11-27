@@ -1085,8 +1085,8 @@ public class NfcPlugin extends CordovaPlugin implements NfcAdapter.OnNdefPushCom
                 // Log.d("itc", String.format("[desc]%s: %s", desc.getType().name(), bytesToHex(desc.getContentString().toCharArray())));
                 if(desc.getType().name().equals("ITC_DIGITAL_SIGNATURE")){
                     Log.d("itc","get signature");
-                    Log.d("itc", String.format("[desc]%s: %s", desc.getType().name(), bytesToHex(desc.getContentString().toCharArray())));
-                    itctag.setItcSig(bytesToHex(desc.getContentString().toCharArray()));
+                    Log.d("itc", String.format("[desc]%s: %s", desc.getType().name(), bytesToHex(desc.getContent())));
+                    itctag.setItcSig(bytesToHex(desc.getContent()));
                 }
            
             }
