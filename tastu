@@ -1,0 +1,89 @@
+[33mcommit 2feac50335f6527536839a8d2786cf60077044b8[m[33m ([m[1;36mHEAD -> [m[1;32mfortest1v2[m[33m)[m
+Author: simonsun314 <simonsun314@gmail.com>
+Date:   Tue Nov 27 23:33:20 2018 +0800
+
+    201811272332 Simon add signature
+
+[33mcommit 348f8740adda89d2c2830621b6efa84d0b53ff60[m[33m ([m[1;31morigin/fortest1v2[m[33m)[m
+Author: simonsun314 <simonsun314@gmail.com>
+Date:   Tue Nov 27 01:30:36 2018 +0800
+
+    201811270130 Simon no alert
+
+[33mcommit b306e5321f49db3f129737216d15aba8f40c3461[m[33m ([m[1;31morigin/master[m[33m, [m[1;32mmaster[m[33m)[m
+Author: simonsun314 <simonsun314@gmail.com>
+Date:   Tue Nov 27 00:44:19 2018 +0800
+
+    20181127 0044 Simon Add err of exception
+
+[33mcommit 2bd28f0a6b79416032f6689e41d71dc9af174914[m
+Author: simonsun314 <simonsun314@gmail.com>
+Date:   Mon Nov 26 01:30:55 2018 +0800
+
+    20181126 0130 Simon add itc count
+
+[33mcommit e13fa01f349e0586b94d5e6bcf680a2083e457cb[m
+Author: simonsun314 <simonsun314@gmail.com>
+Date:   Mon Nov 26 00:07:26 2018 +0800
+
+    20181126 0007 Simon add get itc sig
+
+[33mcommit 21387427a88dcfce6e1b4c42bbfb900865238b7a[m
+Author: simonsun314 <simonsun314@gmail.com>
+Date:   Sun Nov 25 21:57:10 2018 +0800
+
+    20181125 2156 Simon add itc event for auth read
+
+[33mcommit 968acabc517019292bceb72b3616c483ae986309[m
+Author: simonsun314 <simonsun314@gmail.com>
+Date:   Sun Nov 25 18:55:55 2018 +0800
+
+    20181125 1855 Simon put pack as 4,5 para of byte array to pass java
+
+[33mcommit 8015dd994fbab0714e7408b8b5ea03839a2532b6[m
+Author: simonsun314 <simonsun314@gmail.com>
+Date:   Sun Nov 25 17:49:04 2018 +0800
+
+    20181125 1748 Simon: password transcieve to java ok
+
+[33mcommit 8faeed8c6b41cd8512648ab5dbcbb1162b357522[m
+Author: simonsun314 <simonsun314@gmail.com>
+Date:   Sat Nov 24 13:31:52 2018 +0800
+
+    20181124 1331 Simon get nfc error if tag removed
+
+[33mcommit 1413ba459588eb7ad0872c96d6086b42f8058f58[m
+Author: simonsun314 <simonsun314@gmail.com>
+Date:   Thu Nov 22 00:37:04 2018 +0800
+
+    20181122 0036 Simon Sun remove phonegap-nfc.js alert Addtaglistener
+
+[33mcommit 7f8d694c78dd0bd7f200066a10568ae0cea6770d[m
+Author: simonsun314 <simonsun314@gmail.com>
+Date:   Tue Nov 20 01:26:41 2018 +0800
+
+    20181120 01:26 Simon Sun: two stage read and auth pass, error back to js not ready
+
+[33mcommit 18ac86b8bcbaa1db11ff7a5013fdb15d2e9fa4aa[m
+Author: simonsun314 <simonsun314@gmail.com>
+Date:   Sat Nov 17 21:59:22 2018 +0800
+
+    201811172200 simon: remove setintent in plugin java and alert read auth in js.
+
+[33mcommit f6c01c31aeb1a46c560a0d0e1e7416b9f6b05f54[m
+Author: simonsun314 <simonsun314@gmail.com>
+Date:   Sat Nov 17 20:10:21 2018 +0800
+
+    20181117 2008 Simon: seperate read from intent to intent and readAuth, pass data back with event, next step check pass data and change return event by callbackcontext.sucess(JSON)
+
+[33mcommit 999cc031de151b7f69ef5df97e94afeb1f93b843[m
+Author: simonsun314 <simonsun314@gmail.com>
+Date:   Sat Nov 17 09:55:51 2018 +0800
+
+    2018111710:00 Simon Sun: Add itc213 class and get uid and sig thr json
+
+[33mcommit 5e201c4752014acee68b7f728225e40d330a5a7b[m
+Author: simonsun314 <simonsun314@gmail.com>
+Date:   Fri Nov 16 21:18:46 2018 +0800
+
+    nfc ntag 213 v1@Simon Sun 20181116 2118
