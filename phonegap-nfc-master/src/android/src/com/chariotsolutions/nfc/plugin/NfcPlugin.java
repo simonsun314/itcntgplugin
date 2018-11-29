@@ -194,6 +194,10 @@ public class NfcPlugin extends CordovaPlugin implements NfcAdapter.OnNdefPushCom
                 Log.d("itc",String.format("%f",tmp.getLongitude()));
                 Log.d("itc",String.format("%f",tmp.getLatitude()));
                 //fire event give back data
+                // callbackContext.success("back ok");
+                callbackContext.success(String.format("%f",tmp.getLongitude())+","+String.format("%f",tmp.getLatitude()));
+            }else{
+                callbackContext.error("no position data");
             }
          }
         else if (action.equalsIgnoreCase(READ_AUTH_TAG)) {
