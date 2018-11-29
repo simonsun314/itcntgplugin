@@ -456,6 +456,14 @@ var nfc = {
         // alert("read Auth\n");
         cordova.exec(win, fail, "NfcPlugin", "readAuthTag", [buffer]);
     },
+    initGPS: function (win, fail) { //init gps without return
+        cordova.exec(win, fail, "NfcPlugin", "initGPS", []);
+    }, 
+    getPOS: function (callback,win,fail) {
+        document.addEventListener("itc-pgs", callback, false);
+     
+        cordova.exec(win, fail, "NfcPlugin", "getPOS", []);
+    },
     makeReadOnly: function (win, fail) {
         cordova.exec(win, fail, "NfcPlugin", "makeReadOnly", []);
     },

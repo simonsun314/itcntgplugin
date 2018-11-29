@@ -57,6 +57,14 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
 
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Handler;
+import android.content.pm.PackageManager;
+import android.Manifest;
+import android.support.v4.app.ActivityCompat;
+
 
 public class NfcPlugin extends CordovaPlugin implements NfcAdapter.OnNdefPushCompleteCallback {
     private static final String REGISTER_MIME_TYPE = "registerMimeType";
@@ -68,6 +76,8 @@ public class NfcPlugin extends CordovaPlugin implements NfcAdapter.OnNdefPushCom
     private static final String REMOVE_DEFAULT_TAG = "removeTag";
     private static final String WRITE_TAG = "writeTag";
     private static final String READ_AUTH_TAG = "readAuthTag";
+    private static final String INIT_GPS = "initGPS";
+    private static final String GET_POS = "getPOS";
     private static final String MAKE_READ_ONLY = "makeReadOnly";
     private static final String ERASE_TAG = "eraseTag";
     private static final String SHARE_TAG = "shareTag";
@@ -109,6 +119,7 @@ public class NfcPlugin extends CordovaPlugin implements NfcAdapter.OnNdefPushCom
     private PendingIntent pendingIntent = null;
 
     private Intent savedIntent = null;
+    public static final String LOCATION_SERVICE = "location";
 
     private CallbackContext readerModeCallback;
     private CallbackContext channelCallback;
@@ -144,6 +155,8 @@ public class NfcPlugin extends CordovaPlugin implements NfcAdapter.OnNdefPushCom
             return true; // short circuit
         }
 
+
+
         createPendingIntent();
 
         if (action.equalsIgnoreCase(READER_MODE)) {
@@ -173,7 +186,16 @@ public class NfcPlugin extends CordovaPlugin implements NfcAdapter.OnNdefPushCom
 
         } else if (action.equalsIgnoreCase(WRITE_TAG)) {
             writeTag(data, callbackContext);
-        }
+        }else if (action.equalsIgnoreCase(INIT_GPS)) {
+            requestLocation(getActivity());
+        }else if (action.equalsIgnoreCase(GET_POS)) {
+            Location tmp = getLastKnownLocation(getActivity());
+            if(null!=tmp){
+                Log.d("itc",String.format("%f",tmp.getLongitude()));
+                Log.d("itc",String.format("%f",tmp.getLatitude()));
+                //fire event give back data
+            }
+         }
         else if (action.equalsIgnoreCase(READ_AUTH_TAG)) {
             Log.d(TAG, "execute read auth\n" );
 
@@ -1621,6 +1643,123 @@ public class NfcPlugin extends CordovaPlugin implements NfcAdapter.OnNdefPushCom
                 callbackContext.error(cause.getMessage());
             }
         });
+    }
+
+
+    public static void requestLocation(Activity activity) {
+        if( ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        }
+        Log.d("itc","requestLocation");
+        final LocationManager lm = (LocationManager) activity.getSystemService(LOCATION_SERVICE);
+        if(lm == null) {
+            return;
+        }
+        final LocationListener netListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+            }
+
+            @Override
+            public void onStatusChanged(String s, int i, Bundle bundle) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String s) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String s) {
+
+            }
+        };
+
+        final LocationListener gpsListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+            }
+
+            @Override
+            public void onStatusChanged(String s, int i, Bundle bundle) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String s) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String s) {
+
+            }
+        };
+
+        final LocationListener passiveListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+            }
+
+            @Override
+            public void onStatusChanged(String s, int i, Bundle bundle) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String s) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String s) {
+
+            }
+        };
+        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0,
+                0, netListener);
+        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,
+                0, gpsListener);
+        lm.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 0,
+                0, passiveListener);
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                lm.removeUpdates(netListener);
+                lm.removeUpdates(gpsListener);
+                lm.removeUpdates(passiveListener);
+            }
+        }, 1500);
+    }
+
+
+    public static Location getLastKnownLocation(Activity activity) {
+        if( ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        }
+        final LocationManager lm = (LocationManager) activity.getSystemService(LOCATION_SERVICE);
+        if(lm == null) {
+            return null;
+        }
+
+        Location locationGPS = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        Location locationNet = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        long gpsLocationTime = 0;
+        if (null != locationGPS) { gpsLocationTime = locationGPS.getTime(); }
+
+        long netLocationTime = 0;
+
+        if (null != locationNet) {
+            netLocationTime = locationNet.getTime();
+        }
+        if ( 0 < (gpsLocationTime - netLocationTime) ) {
+            return locationGPS;
+        }
+        else {
+            return locationNet;
+        }
     }
 
 }
