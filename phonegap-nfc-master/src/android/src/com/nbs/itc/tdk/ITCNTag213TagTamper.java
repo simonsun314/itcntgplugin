@@ -41,7 +41,7 @@ public class ITCNTag213TagTamper extends NTag213TagTamper {
     public ITCData readITCData() throws IOException {
         // read itcid & header
         byte[] unencryptedBuf = super.fastRead(PAGE_ITC_DATA_START + OFFSET_PAGE_ITCID,
-                PAGE_ITC_DATA_START + ITCID.ITCID_PAGE_COUNT + ITCHeader.HEADER_PAGE_COUNT);
+                PAGE_ITC_DATA_START + ITCID.ITCID_PAGE_COUNT + ITCHeader.HEADER_PAGE_COUNT - 1);
         ITCID itcid = new ITCID(Arrays.copyOfRange(unencryptedBuf, 0, ITCID.ITCID_PAGE_COUNT * 4));
         ITCHeader header = new ITCHeader(Arrays.copyOfRange(unencryptedBuf, ITCID.ITCID_PAGE_COUNT * 4, unencryptedBuf.length));
         ITCDescriptors descs = null;

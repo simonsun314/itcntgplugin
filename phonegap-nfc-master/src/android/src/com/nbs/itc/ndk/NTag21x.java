@@ -16,6 +16,12 @@ import java.util.Arrays;
 
 public class NTag21x {
 
+    class InvalidPackException extends Exception {
+        public InvalidPackException(String message) {
+            super(message);
+        }
+    }
+
     class NotNTagException extends Exception {
         public NotNTagException() {
             throw new RuntimeException("Stub!");
@@ -132,13 +138,13 @@ public class NTag21x {
         });
     }
 
-    public void authenticatePwd(byte[] password, byte[] passwordAcknowledgement) throws Exception {
+    public void authenticatePwd(byte[] password, byte[] passwordAcknowledgement) throws InvalidPackException, IOException {
         byte[] response = nfcA.transceive(new byte[]{
                 PWD_AUTH,
                 password[0], password[1], password[2], password[3]
         });
         if(response[0] != passwordAcknowledgement[0] || response[1] != passwordAcknowledgement[1]) {
-            throw new Exception("invalid pack");
+            throw new InvalidPackException("invalid pack");
         }
     }
 
