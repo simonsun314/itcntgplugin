@@ -1425,6 +1425,16 @@ public class NfcPlugin extends CordovaPlugin implements NfcAdapter.OnNdefPushCom
                     //writeNTag213TT(nTag213tt);
                     writeNTag213(nTag213);
                 }
+            }else if (sVersion.equals(bytesToHex(NTag21x.TAG_VERSION_NTAG_216))){
+                //ITCNTag213TagTamper nTag213tt = ITCNTag213TagTamper.wrap(nTag21x);
+                ITCNTag213 nTag213 = ITCNTag213.wrap(nTag21x);
+                if(read) {
+                    //readNTag213TT(nTag213tt);
+                    readNTag213(nTag213);
+                } else {
+                    //writeNTag213TT(nTag213tt);
+                    writeNTag213(nTag213);
+                }
             }
             nTag21x.close();
         } catch(Exception ex) {
@@ -1452,6 +1462,16 @@ public class NfcPlugin extends CordovaPlugin implements NfcAdapter.OnNdefPushCom
                    writeNTag213(nTag213);
                }
             } else if (sVersion.equals(bytesToHex(NTag21x.TAG_VERSION_NTAG_213_TAG_TAMPER))){
+                // ITCNTag213TagTamper nTag213tt = ITCNTag213TagTamper.wrap(nTag21x);
+                ITCNTag213 nTag213 = ITCNTag213.wrap(nTag21x);
+                if(read) {
+                    //readNTag213TT(nTag213tt);
+                    readNTag213Auth(nTag213,authwd);
+                } else {
+                    // writeNTag213TT(nTag213tt);
+                    writeNTag213(nTag213);
+                }
+            }else if (sVersion.equals(bytesToHex(NTag21x.TAG_VERSION_NTAG_216))){
                 // ITCNTag213TagTamper nTag213tt = ITCNTag213TagTamper.wrap(nTag21x);
                 ITCNTag213 nTag213 = ITCNTag213.wrap(nTag21x);
                 if(read) {

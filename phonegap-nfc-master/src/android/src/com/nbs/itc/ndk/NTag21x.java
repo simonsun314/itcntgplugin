@@ -48,14 +48,14 @@ public class NTag21x {
     private boolean debugMode = false;
 
     // User Memory (It's defined in the children)
-    protected byte PAGE_USER_START;
-    protected byte PAGE_USER_END;
-    protected byte AUTH0_CONFIG_PAGE;
-    protected byte ACCESS_CONFIG_PAGE;
-    protected byte PWD_CONFIG_PAGE;
-    protected byte PACK_CONFIG_PAGE;
-    protected byte PAGE_CONFIG_0;
-    protected byte PAGE_CONFIG_1;
+    protected int PAGE_USER_START;
+    protected int PAGE_USER_END;
+    protected int AUTH0_CONFIG_PAGE;
+    protected int ACCESS_CONFIG_PAGE;
+    protected int PWD_CONFIG_PAGE;
+    protected int PACK_CONFIG_PAGE;
+    protected int PAGE_CONFIG_0;
+    protected int PAGE_CONFIG_1;
 
     // Available CMDs
     private static final byte READ = (byte) 0x30;
@@ -76,6 +76,7 @@ public class NTag21x {
 
     public final static byte[] TAG_VERSION_NTAG_213 = new byte[] {0x00, 0x04, 0x04, 0x02, 0x01, 0x00, 0x0f, 0x03};
     public final static byte[] TAG_VERSION_NTAG_213_TAG_TAMPER = new byte[] {0x00, 0x04, 0x04, 0x02, 0x03, 0x00, 0x0f, 0x03};
+    public final static byte[] TAG_VERSION_NTAG_216 = new byte[] {0x00, 0x04, 0x04, 0x02, 0x01, 0x00, 0x13, 0x03};
 
 
     public NTag21x(Tag tag) {

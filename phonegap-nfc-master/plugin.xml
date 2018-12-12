@@ -36,6 +36,8 @@
             target-dir="src/com/nbs/itc/ndk/"/>
         <source-file src="src/android/src/com/nbs/itc/ndk/NTag213.java"
             target-dir="src/com/nbs/itc/ndk/"/>
+        <source-file src="src/android/src/com/nbs/itc/ndk/NTag216.java"
+            target-dir="src/com/nbs/itc/ndk/"/>
         <source-file src="src/android/src/com/nbs/itc/ndk/NTag213TagTamper.java"
             target-dir="src/com/nbs/itc/ndk/"/>
         <source-file src="src/android/src/com/nbs/itc/tdk/BufCodec.java"
