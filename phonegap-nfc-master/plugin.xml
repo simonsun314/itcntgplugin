@@ -54,9 +54,15 @@
             target-dir="src/com/nbs/itc/tdk/"/>
         <source-file src="src/android/src/com/nbs/itc/tdk/ITCID.java"
             target-dir="src/com/nbs/itc/tdk/"/>
+        <source-file src="src/android/src/com/nbs/itc/tdk/ITCNdef.java"
+            target-dir="src/com/nbs/itc/tdk/"/>
         <source-file src="src/android/src/com/nbs/itc/tdk/ITCNTag213.java"
             target-dir="src/com/nbs/itc/tdk/"/>
         <source-file src="src/android/src/com/nbs/itc/tdk/ITCNTag213TagTamper.java"
+            target-dir="src/com/nbs/itc/tdk/"/>
+        <source-file src="src/android/src/com/nbs/itc/tdk/ITCNTag216.java"
+            target-dir="src/com/nbs/itc/tdk/"/>
+         <source-file src="src/android/src/com/nbs/itc/tdk/ITCRW.java"
             target-dir="src/com/nbs/itc/tdk/"/>
         <source-file src="src/android/src/com/nbs/itc/tdk/ITCTagCapability.java"
             target-dir="src/com/nbs/itc/tdk/"/>

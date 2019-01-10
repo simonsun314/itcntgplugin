@@ -14,7 +14,7 @@ import java.util.zip.Checksum;
  *
  */
 public class ITCDescriptors extends BufCodec {
-    public final static int DESCRIPTOR_PAGE_COUNT = 30;
+    public final static int DESCRIPTOR_PAGE_COUNT = 100;
     private final static int OFFSET_DESC_COUNT = 0;
     private final static int OFFSET_DESC_LENGTH = 1;
     private final static int OFFSET_DESC_START = 4;
@@ -78,6 +78,7 @@ public class ITCDescriptors extends BufCodec {
             pointer += descriptorPages * 4;
         }
         buf[OFFSET_DESC_LENGTH] = (byte)pointer;
+        buf = Arrays.copyOf(buf, pointer + OFFSET_DESC_START);
     }
 
 }

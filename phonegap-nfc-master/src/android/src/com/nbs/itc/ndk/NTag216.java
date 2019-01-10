@@ -25,6 +25,8 @@ public class NTag216 extends NTag21x {
         super.PACK_CONFIG_PAGE = 0xE6;
         super.PAGE_CONFIG_0 = 0xE3;
         super.PAGE_CONFIG_1 = 0xE4;
+        super.PAGE_STATIC_LOCK = 0x02;
+        super.PAGE_DYNAMIC_LOCK = 0xE2;
     }
 
 

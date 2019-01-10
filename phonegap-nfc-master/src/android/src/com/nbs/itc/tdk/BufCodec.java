@@ -4,8 +4,6 @@ import android.util.Log;
 
 import java.util.Arrays;
 
-import java.nio.ByteBuffer;
-
 public class BufCodec {
 
     public interface BufValidator {
@@ -43,14 +41,6 @@ public class BufCodec {
     public byte[] getRaw() {
         return Arrays.copyOf(buf, buf.length);
     }
-
-    public short getRawItc() {
-        byte[] itcdata =  Arrays.copyOf(buf, buf.length);
-        ByteBuffer bb = ByteBuffer.wrap(itcdata);
-        return bb.getShort();
-    }
-
-
 
     public final static String bytesToHexString(byte[] bytes) {
         char[] hexArray = "0123456789ABCDEF".toCharArray();

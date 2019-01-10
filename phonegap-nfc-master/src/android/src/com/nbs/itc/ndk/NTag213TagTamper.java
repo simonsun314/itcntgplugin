@@ -35,6 +35,8 @@ public class NTag213TagTamper extends NTag21x {
         super.PACK_CONFIG_PAGE = (byte) 0x2C;
         super.PAGE_CONFIG_0 = (byte) 0x29;
         super.PAGE_CONFIG_1 = (byte) 0x2A;
+        super.PAGE_STATIC_LOCK = 0x02;
+        super.PAGE_DYNAMIC_LOCK = 0x28;
     }
 
     public byte[] readTTStatus() throws IOException {

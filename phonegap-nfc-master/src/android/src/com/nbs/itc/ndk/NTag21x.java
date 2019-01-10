@@ -48,14 +48,16 @@ public class NTag21x {
     private boolean debugMode = false;
 
     // User Memory (It's defined in the children)
-    protected int PAGE_USER_START;
-    protected int PAGE_USER_END;
-    protected int AUTH0_CONFIG_PAGE;
-    protected int ACCESS_CONFIG_PAGE;
-    protected int PWD_CONFIG_PAGE;
-    protected int PACK_CONFIG_PAGE;
-    protected int PAGE_CONFIG_0;
-    protected int PAGE_CONFIG_1;
+    public int PAGE_USER_START;
+    public int PAGE_USER_END;
+    public int AUTH0_CONFIG_PAGE;
+    public int ACCESS_CONFIG_PAGE;
+    public int PWD_CONFIG_PAGE;
+    public int PACK_CONFIG_PAGE;
+    public int PAGE_CONFIG_0;
+    public int PAGE_CONFIG_1;
+    public int PAGE_STATIC_LOCK;
+    public int PAGE_DYNAMIC_LOCK;
 
     // Available CMDs
     private static final byte READ = (byte) 0x30;

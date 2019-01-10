@@ -8,17 +8,20 @@ import java.util.zip.Checksum;
 
 public class ITCData implements BufCodec.BufValidator {
     private ITCID itcid;
+    private byte[] ds;
     private ITCHeader itcHeader;
     private ITCDescriptors itcDescriptors;
     private ITCChecksum itcChecksum;
-    public ITCData(ITCID itcid, ITCHeader itcHeader, ITCDescriptors itcDescriptors, ITCChecksum itcChecksum) {
+    public ITCData(ITCID itcid, ITCHeader itcHeader, byte[] ds, ITCDescriptors itcDescriptors, ITCChecksum itcChecksum) {
+        this.ds = Arrays.copyOf(ds, ds.length);
         this.itcid = itcid;
         this.itcHeader = itcHeader;
         this.itcDescriptors = itcDescriptors;
         this.itcChecksum = itcChecksum;
     }
 
-    public ITCData(ITCID itcid, ITCHeader itcHeader, ITCDescriptors itcDescriptors) {
+    public ITCData(ITCID itcid, ITCHeader itcHeader, byte[] ds,  ITCDescriptors itcDescriptors) {
+        this.ds = Arrays.copyOf(ds, ds.length);
         this.itcid = itcid;
         this.itcHeader = itcHeader;
         this.itcDescriptors = itcDescriptors;
@@ -28,15 +31,19 @@ public class ITCData implements BufCodec.BufValidator {
         return itcid;
     }
 
-    public ITCHeader getItcHeader() {
+    public byte[] getDS() {
+        return ds;
+    }
+
+    public ITCHeader getITCHeader() {
         return itcHeader;
     }
 
-    public ITCDescriptors getItcDescriptors() {
+    public ITCDescriptors getITCDescriptors() {
         return itcDescriptors;
     }
 
-    public ITCChecksum getItcChecksum() {
+    public ITCChecksum getITCChecksum() {
         return itcChecksum;
     }
 
@@ -70,15 +77,13 @@ public class ITCData implements BufCodec.BufValidator {
 
 
     private int calcCRC32() throws InvalidObjectException {
-        if(itcid == null || itcHeader == null || itcDescriptors == null) {
+        if(itcDescriptors == null) {
             throw new InvalidObjectException("invalid data");
         }
-        byte[] bufCalc = new byte[itcid.buf.length + itcHeader.buf.length + itcDescriptors.buf.length];
+        byte[] bufCalc = new byte[itcDescriptors.buf.length];
 
-        System.arraycopy(itcid.buf, 0, bufCalc, 0, itcid.buf.length);
-        System.arraycopy(itcHeader.buf, 0, bufCalc, itcid.buf.length, itcHeader.buf.length);
         System.arraycopy(itcDescriptors.buf, 0, bufCalc,
-                itcid.buf.length + itcHeader.buf.length, itcDescriptors.buf.length);
+                0, itcDescriptors.buf.length);
         Checksum checksum = new CRC32();
         checksum.update(bufCalc, 0, bufCalc.length);
 
